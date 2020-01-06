@@ -7,5 +7,4 @@ for i in range (6):
         #j en x
         #i en y
         string  = "INSERT INTO public.capteur(id, x, y, intensite) VALUES ("+ str(10*i+j) +", "+ str(j) +", "+ str(i) +", 0);"
-        pprint(string)
-        pprint(j)
+        print(string)
