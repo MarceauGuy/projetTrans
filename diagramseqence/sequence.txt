@@ -1,0 +1,35 @@
+title Fire Detection and Eradication sequence
+loop simulation
+    Simulator->Simulator: Simule des feux
+end
+Simulator->Simulator's web server: Feux simulés
+
+Simulator's web server->Database: Ecriture des feux simulés
+Simulator's web server->Sensors: Écriture des feux simulés
+
+Sensors->Data Collect: Feux simulés
+
+Data Collect->Emergency's web server:Ecriture des feux
+
+Emergency's web server->Database : Ecriture des feux
+loop info feu
+    Emergency manager->+Emergency's web server: Requétage feux
+    Emergency's web server->+Database : Requétage feux
+    Database->-Emergency's web server : Infos feux
+    Emergency's web server->-Emergency manager: Infos feux
+end
+Emergency manager->Emergency's web server:Envoie camion
+Emergency's web server->Database : Affectation camion
+
+
+Simulator's web server->+Database : Requetage info affectation camion
+Database->-Simulator's web server: Info camion
+
+Simulator's web server->+Simulator : Affectation camion
+Simulator->-Simulator's web server : Action camion/feu
+
+Emergency's web server-> Emergency view: Position feux, camion
+
+Emergency's web server-> Dashboard: Toute infos, timestamp etc.
+
+

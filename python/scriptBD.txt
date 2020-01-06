@@ -1,0 +1,124 @@
+-- Table: public.camion
+
+-- DROP TABLE public.camion;
+
+CREATE TABLE public.camion
+(
+    idcamion integer NOT NULL,
+    idcapteur integer,
+    idcaserne integer,
+    idtype integer,
+    x integer,
+    y integer,
+    CONSTRAINT camion_pkey PRIMARY KEY (idcamion),
+    CONSTRAINT fk_idcapteur FOREIGN KEY (idcapteur)
+        REFERENCES public.capteur (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT fk_idcaserne FOREIGN KEY (idcaserne)
+        REFERENCES public.caserne (idcaserne) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT fk_idtype FOREIGN KEY (idtype)
+        REFERENCES public.typecamione (idtype) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.camion
+    OWNER to postgres;
+
+-- Index: fki_fk_idcapteur
+
+-- DROP INDEX public.fki_fk_idcapteur;
+
+CREATE INDEX fki_fk_idcapteur
+    ON public.camion USING btree
+    (idcapteur ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Index: fki_fk_idcaserne
+
+-- DROP INDEX public.fki_fk_idcaserne;
+
+CREATE INDEX fki_fk_idcaserne
+    ON public.camion USING btree
+    (idcaserne ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Index: fki_fk_idtype
+
+-- DROP INDEX public.fki_fk_idtype;
+
+CREATE INDEX fki_fk_idtype
+    ON public.camion USING btree
+    (idtype ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+-- Table: public.capteur
+
+-- DROP TABLE public.capteur;
+
+CREATE TABLE public.capteur
+(
+    id integer NOT NULL,
+    x integer,
+    y integer,
+    intensite integer,
+    CONSTRAINT "Capteur_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.capteur
+    OWNER to postgres;
+
+
+
+-- Table: public.caserne
+
+-- DROP TABLE public.caserne;
+
+CREATE TABLE public.caserne
+(
+    idcaserne integer NOT NULL,
+    nom text COLLATE pg_catalog."default",
+    x integer,
+    y integer,
+    CONSTRAINT caserne_pkey PRIMARY KEY (idcaserne)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.caserne
+    OWNER to postgres;
+
+
+
+
+-- Table: public.typecamione
+
+-- DROP TABLE public.typecamione;
+
+CREATE TABLE public.typecamione
+(
+    idtype integer NOT NULL,
+    nomtype text COLLATE pg_catalog."default",
+    intensite integer,
+    CONSTRAINT typecamione_pkey PRIMARY KEY (idtype)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.typecamione
+    OWNER to postgres;
