@@ -45,10 +45,11 @@ def getCamion ():
 def splitCamion(camions) : 
     splitCamions = camions.split(";")
     cursor = connection.cursor()
+    queryString = """UPDATE public.camion SET x=%s, y=%s  where idcamion = %s"""
     for camion in splitCamions:
         splitCamion = camion.split(",")
         try:
-            execute_values(cursor,"UPDATE public.camion SET x=%s, y=%s  where idcamion = %s",(splitCamion[1],splitCamion[2],splitCamion[0]))
+            cursor.execute(queryString,(splitCamion[1],splitCamion[2],splitCamion[0]))
         except (Exception, psycopg2.Error) as error :
             print ("Error while updating data in camion table", error)   
     return "hehe"
@@ -57,11 +58,11 @@ def splitCamion(camions) :
 def splitCapteur(capteurs) : 
     splitCapteurs = capteurs.split(";")
     cursor = connection.cursor()
-    queryString = ""
+    queryString = """UPDATE public.capteur set intensity=%s where id=%s"""
     for capteur in splitCapteurs:
         splitCapteur = capteur.split(",")
     try:
-        execute_values(cursor,"UPDATE public.capteur set intensity=%s where id=%s",(splitCapteur[1], splitCapteur[0]))
+        cursor.execute(queryString,(splitCapteur[1], splitCapteur[0]))
     except (Exception, psycopg2.Error) as error :
         print ("Error while updating data in capteur table", error)   
     return "hehe"
