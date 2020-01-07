@@ -1,0 +1,4 @@
+getcapteur "id,x,y,intensity;..." 
+getcamion  "id,x,y,casx,casy,instensity,idcapteur;..."
+setcapteur "id,intensite;..."
+setcamion  "id,x,y;..."

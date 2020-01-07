@@ -2,28 +2,6 @@ import psycopg2
 from flask import Flask
 from pprint import pprint
 
-
-
-def getCapteur ():
-    try:
-        
-        cursor = connection.cursor()
-
-        postgreSQL_select_Query = "select * from capteur"
-    
-        cursor.execute(postgreSQL_select_Query)
-        print("Selecting rows from mobile table using cursor.fetchall")
-        mobile_records = cursor.fetchall() 
-    
-        print("Print each row and it's columns values")
-        for row in mobile_records:
-            print("Id = ", row[0], )
-            print("x = ", row[1])
-            print("y  = ", row[2])
-            print("intensity = ", row[3],"\n")
-        
-    except (Exception, psycopg2.Error) as error :
-        print ("Error while fetching data from PostgreSQL", error)
 """
     finally:
         #closing database connection.
@@ -32,32 +10,47 @@ def getCapteur ():
             connection.close()
             print("PostgreSQL connection is closed")
 """
+
+def getCapteur ():
+    try:
+        
+        cursor = connection.cursor()
+
+        postgreSQL_select_Query = "SELECT * FROM public.capteur;"
+    
+        cursor.execute(postgreSQL_select_Query)
+        mobile_records = cursor.fetchall() 
+        returnString = ""
+        print(mobile_records)
+        for row in mobile_records:
+            returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
+        print returnString
+        
+    except (Exception, psycopg2.Error) as error :
+        print ("Error while fetching data from PostgreSQL", error)
+    returnString = returnString[:-1]
+    return returnString
+
+
 def getCamion ():
     try:
         
         cursor = connection.cursor()
 
-        postgreSQL_select_Query = "select idcamion, idcapteur, x, y, intensite from camion, typecamion where camion.idtype = typecamion.idtype;"
+        postgreSQL_select_Query = "SELECT cam.idcamion, cam.x, cam.y, cas.x, cas.y, t.intensite, cam.idcapteur FROM public.camion cam, public.typecamion t, public.caserne cas where cam.idtype = t.idtype and cam.idcaserne = cas.idcaserne;"
     
         cursor.execute(postgreSQL_select_Query)
-        print("Selecting rows from mobile table using cursor.fetchall")
         mobile_records = cursor.fetchall() 
     
-        print("Print each row and it's columns values")
-
         returnString=""
         for row in mobile_records:
-            print("Id Camion = ", row[0], )
-            print("Id Capteur = ", row[1])
-            print("x  = ", row[2])
-            print("y = ", row[3])
-            print("intensite = ", row[4],"\n")
-            returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + str(row[4]) + ";" 
+            returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + str(row[4]) + "," + str(row[5]) + "," + str(row[6]) + ";" 
 
         print(returnString)    
         
     except (Exception, psycopg2.Error) as error :
         print ("Error while fetching data from PostgreSQL", error)
+    returnString = returnString[:-1]
     return returnString
 """
     finally:
@@ -67,6 +60,10 @@ def getCamion ():
             connection.close()
             print("PostgreSQL connection is closed")
 """
+
+def splitCamion() : 
+
+    return "eheh"
 
 
 ###########################################################
@@ -79,6 +76,8 @@ try:
                                         host="127.0.0.1",
                                         port="5432",
                                     database="postgres")
+
+
 except (Exception, psycopg2.Error) as error :
     print ("Error while fetching data from PostgreSQL", error)
 
@@ -88,21 +87,24 @@ def home():
     return "Hello, Flask!"
 
 
-@app.route("/capteur")
+@app.route("/capteur/getCapteurs")
 def capteur ():
-    getCapteur()
-    return "on est alle chercher les capteurs"
+    response = getCapteur()
+    return response
 
+@app.route("/capteur/setCapteur")
+def setCapteur():
+    return "pour set les capteur"
 
-@app.route("/camion/getCamion", methods = ['GET'])
+@app.route("/camion/getCamions", methods = ['GET'])
 def camion ():
     response = getCamion()
     return response
 
 
-@app.route("/camion/updateCamion")
+@app.route("/camion/setCamions", methods = ['POST'])
 def updateCamion ():
-    return "pour update de camion"
+    return "pour set les camions"
 
     
 if __name__ == '__main__':

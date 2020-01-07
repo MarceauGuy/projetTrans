@@ -1,346 +1,123 @@
---
--- PostgreSQL database dump
---
+-- Table: public.camion
 
--- Dumped from database version 12.1 (Ubuntu 12.1-1.pgdg18.04+1)
--- Dumped by pg_dump version 12.1 (Ubuntu 12.1-1.pgdg18.04+1)
+-- DROP TABLE public.camion;
 
-SET statement_timeout = 0;
-SET lock_timeout = 0;
-SET idle_in_transaction_session_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SELECT pg_catalog.set_config('search_path', '', false);
-SET check_function_bodies = false;
-SET xmloption = content;
-SET client_min_messages = warning;
-SET row_security = off;
-
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
---
--- Name: camion; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.camion (
+CREATE TABLE public.camion
+(
     idcamion integer NOT NULL,
     idcapteur integer,
     idcaserne integer,
     idtype integer,
-    x integer,
-    y integer
-);
+    x double precision,
+    y double precision,
+    CONSTRAINT camion_pkey PRIMARY KEY (idcamion),
+    CONSTRAINT fk_idcapteur FOREIGN KEY (idcapteur)
+        REFERENCES public.capteur (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT fk_idcaserne FOREIGN KEY (idcaserne)
+        REFERENCES public.caserne (idcaserne) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID,
+    CONSTRAINT fk_idtype FOREIGN KEY (idtype)
+        REFERENCES public.typecamion (idtype) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.camion
+    OWNER to postgres;
+
+-- Index: fki_fk_idcapteur
+
+-- DROP INDEX public.fki_fk_idcapteur;
+
+CREATE INDEX fki_fk_idcapteur
+    ON public.camion USING btree
+    (idcapteur ASC NULLS LAST)
+    TABLESPACE pg_default;
 
 
-ALTER TABLE public.camion OWNER TO postgres;
+-- Index: fki_fk_idcaserne
 
---
--- Name: capteur; Type: TABLE; Schema: public; Owner: postgres
---
+-- DROP INDEX public.fki_fk_idcaserne;
 
-CREATE TABLE public.capteur (
+CREATE INDEX fki_fk_idcaserne
+    ON public.camion USING btree
+    (idcaserne ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+-- Index: fki_fk_idtype
+
+-- DROP INDEX public.fki_fk_idtype;
+
+CREATE INDEX fki_fk_idtype
+    ON public.camion USING btree
+    (idtype ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+
+
+
+-- Table: public.capteur
+
+-- DROP TABLE public.capteur;
+
+CREATE TABLE public.capteur
+(
     id integer NOT NULL,
     x integer,
     y integer,
-    intensite integer
-);
+    intensite integer,
+    CONSTRAINT "Capteur_pkey" PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.capteur
+    OWNER to postgres;
 
 
-ALTER TABLE public.capteur OWNER TO postgres;
 
---
--- Name: caserne; Type: TABLE; Schema: public; Owner: postgres
---
+-- Table: public.caserne
 
-CREATE TABLE public.caserne (
+-- DROP TABLE public.caserne;
+
+CREATE TABLE public.caserne
+(
     idcaserne integer NOT NULL,
-    nom text,
+    nom text COLLATE pg_catalog."default",
     x integer,
-    y integer
-);
+    y integer,
+    CONSTRAINT caserne_pkey PRIMARY KEY (idcaserne)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.caserne
+    OWNER to postgres;
 
 
-ALTER TABLE public.caserne OWNER TO postgres;
+    -- Table: public."feuSimulated"
 
---
--- Name: feuSimulated; Type: TABLE; Schema: public; Owner: postgres
---
+-- DROP TABLE public."feuSimulated";
 
-CREATE TABLE public."feuSimulated" (
+CREATE TABLE public."feuSimulated"
+(
     id integer NOT NULL,
     x integer,
     y integer,
-    intensity integer
-);
+    intensity integer,
+    CONSTRAINT "feuSimulated_pkey" PRIMARY KEY (id)
+)
 
+TABLESPACE pg_default;
 
-ALTER TABLE public."feuSimulated" OWNER TO postgres;
-
---
--- Name: typecamion; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.typecamion (
-    idtype integer NOT NULL,
-    nomtype text,
-    intensite integer
-);
-
-
-ALTER TABLE public.typecamion OWNER TO postgres;
-
---
--- Data for Name: camion; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.camion (idcamion, idcapteur, idcaserne, idtype, x, y) FROM stdin;
-1	1	1	1	1	1
-2	1	1	1	2	2
-\.
-
-
---
--- Data for Name: capteur; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.capteur (id, x, y, intensite) FROM stdin;
-0	0	0	0
-1	1	0	0
-2	2	0	0
-3	3	0	0
-4	4	0	0
-5	5	0	0
-6	6	0	0
-7	7	0	0
-8	8	0	0
-9	9	0	0
-10	0	1	0
-11	1	1	0
-12	2	1	0
-13	3	1	0
-14	4	1	0
-15	5	1	0
-16	6	1	0
-17	7	1	0
-18	8	1	0
-19	9	1	0
-20	0	2	0
-21	1	2	0
-22	2	2	0
-23	3	2	0
-24	4	2	0
-25	5	2	0
-26	6	2	0
-27	7	2	0
-28	8	2	0
-29	9	2	0
-30	0	3	0
-31	1	3	0
-32	2	3	0
-33	3	3	0
-34	4	3	0
-35	5	3	0
-36	6	3	0
-37	7	3	0
-38	8	3	0
-39	9	3	0
-40	0	4	0
-41	1	4	0
-42	2	4	0
-43	3	4	0
-44	4	4	0
-45	5	4	0
-46	6	4	0
-47	7	4	0
-48	8	4	0
-49	9	4	0
-50	0	5	0
-51	1	5	0
-52	2	5	0
-53	3	5	0
-54	4	5	0
-55	5	5	0
-56	6	5	0
-57	7	5	0
-58	8	5	0
-59	9	5	0
-\.
-
-
---
--- Data for Name: caserne; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.caserne (idcaserne, nom, x, y) FROM stdin;
-1	caserneDeTess	0	0
-\.
-
-
---
--- Data for Name: feuSimulated; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public."feuSimulated" (id, x, y, intensity) FROM stdin;
-1	0	0	0
-2	1	0	0
-3	2	0	0
-4	3	0	0
-5	4	0	0
-6	5	0	0
-7	6	0	0
-8	7	0	0
-9	8	0	0
-10	9	0	0
-11	0	1	0
-12	1	1	0
-13	2	1	0
-14	3	1	0
-15	4	1	0
-16	5	1	0
-17	6	1	0
-18	7	1	0
-19	8	1	0
-20	9	1	0
-21	0	2	0
-22	1	2	0
-23	2	2	0
-24	3	2	0
-25	4	2	0
-26	5	2	0
-27	6	2	0
-28	7	2	0
-29	8	2	0
-30	9	2	0
-31	0	3	0
-32	1	3	0
-33	2	3	0
-34	3	3	0
-35	4	3	0
-36	5	3	0
-37	6	3	0
-38	7	3	0
-39	8	3	0
-40	9	3	0
-41	0	4	0
-42	1	4	0
-43	2	4	0
-44	3	4	0
-45	4	4	0
-46	5	4	0
-47	6	4	0
-48	7	4	0
-49	8	4	0
-50	9	4	0
-51	0	5	0
-52	1	5	0
-53	2	5	0
-54	3	5	0
-55	4	5	0
-56	5	5	0
-57	6	5	0
-58	7	5	0
-59	8	5	0
-60	9	5	0
-\.
-
-
---
--- Data for Name: typecamion; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.typecamion (idtype, nomtype, intensite) FROM stdin;
-1	Basique	5
-\.
-
-
---
--- Name: capteur Capteur_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.capteur
-    ADD CONSTRAINT "Capteur_pkey" PRIMARY KEY (id);
-
-
---
--- Name: camion camion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.camion
-    ADD CONSTRAINT camion_pkey PRIMARY KEY (idcamion);
-
-
---
--- Name: caserne caserne_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.caserne
-    ADD CONSTRAINT caserne_pkey PRIMARY KEY (idcaserne);
-
-
---
--- Name: feuSimulated feuSimulated_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."feuSimulated"
-    ADD CONSTRAINT "feuSimulated_pkey" PRIMARY KEY (id);
-
-
---
--- Name: typecamion typecamione_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.typecamion
-    ADD CONSTRAINT typecamione_pkey PRIMARY KEY (idtype);
-
-
---
--- Name: fki_fk_idcapteur; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX fki_fk_idcapteur ON public.camion USING btree (idcapteur);
-
-
---
--- Name: fki_fk_idcaserne; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX fki_fk_idcaserne ON public.camion USING btree (idcaserne);
-
-
---
--- Name: fki_fk_idtype; Type: INDEX; Schema: public; Owner: postgres
---
-
-CREATE INDEX fki_fk_idtype ON public.camion USING btree (idtype);
-
-
---
--- Name: camion fk_idcapteur; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.camion
-    ADD CONSTRAINT fk_idcapteur FOREIGN KEY (idcapteur) REFERENCES public.capteur(id) NOT VALID;
-
-
---
--- Name: camion fk_idcaserne; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.camion
-    ADD CONSTRAINT fk_idcaserne FOREIGN KEY (idcaserne) REFERENCES public.caserne(idcaserne) NOT VALID;
-
-
---
--- Name: camion fk_idtype; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.camion
-    ADD CONSTRAINT fk_idtype FOREIGN KEY (idtype) REFERENCES public.typecamion(idtype) NOT VALID;
-
-
---
--- PostgreSQL database dump complete
---
-
+ALTER TABLE public."feuSimulated"
+    OWNER to postgres;
