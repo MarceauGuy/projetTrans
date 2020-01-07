@@ -11,59 +11,37 @@ from pprint import pprint
             print("PostgreSQL connection is closed")
 """
 
-def getCapteur ():
-    returnString = ""
+def selectRequest(queryString):
+    mobile_records = ""
     try:
         
         cursor = connection.cursor()
-
-        postgreSQL_select_Query = "SELECT * FROM public.capteur;"
     
-        cursor.execute(postgreSQL_select_Query)
+        cursor.execute(queryString)
         mobile_records = cursor.fetchall() 
-        
-        print(mobile_records)
-        for row in mobile_records:
-            returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
-        print(returnString)
         
     except (Exception, psycopg2.Error) as error :
         print ("Error while fetching data from PostgreSQL", error)
+    return mobile_records   
+
+def getCapteur ():
+    results = selectRequest("SELECT * FROM public.capteur;")
+    returnString = ""
+    for row in results:
+        returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
     returnString = returnString[:-1]
     return returnString
 
 
 def getCamion ():
     returnString=""
-    try:
-        
-        cursor = connection.cursor()
-
-        postgreSQL_select_Query = "SELECT cam.idcamion, cam.x, cam.y, cas.x, cas.y, t.intensite, cam.idcapteur FROM public.camion cam, public.typecamion t, public.caserne cas where cam.idtype = t.idtype and cam.idcaserne = cas.idcaserne;"
-    
-        cursor.execute(postgreSQL_select_Query)
-        mobile_records = cursor.fetchall() 
-    
-        for row in mobile_records:
-            returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + str(row[4]) + "," + str(row[5]) + "," + str(row[6]) + ";" 
-
-        print(returnString)    
-        
-    except (Exception, psycopg2.Error) as error :
-        print ("Error while fetching data from PostgreSQL", error)
+    results = selectRequest("SELECT cam.idcamion, cam.x, cam.y, cas.x, cas.y, t.intensite, cam.idcapteur FROM public.camion cam, public.typecamion t, public.caserne cas where cam.idtype = t.idtype and cam.idcaserne = cas.idcaserne;")
+    for row in results : 
+        returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + str(row[4]) + "," + str(row[5]) + "," + str(row[6]) + ";"
     returnString = returnString[:-1]
     return returnString
-"""
-    finally:
-        #closing database connection.
-        if(connection):
-            cursor.close()
-            connection.close()
-            print("PostgreSQL connection is closed")
-"""
 
 def splitCamion(camions) : 
-    queryString=""
     splitCamions = camions.split(";")
     cursor = connection.cursor()
     for camion in splitCamions:
@@ -74,6 +52,24 @@ def splitCamion(camions) :
             print ("Error while updating data in camion table", error)   
     return "hehe"
     
+
+def splitCapteur(capteurs) : 
+    splitCapteurs = capteurs.split(";")
+    cursor = connection.cursor()
+    for capteur in splitCapteurs:
+        splitCapteur = capteur.split(",")
+        try:
+            cursor.execute("UPDATE public.capteur set intensity=%s where id=%s",(splitCapteur[1], splitCapteur[0]))
+        except (Exception, psycopg2.Error) as error :
+            print ("Error while updating data in camion table", error)   
+    return "hehe"
+    
+
+def getAffectation(idCamion):
+    queryString = "select idcapteur from public.camion where idcamion = "+idCamion+";"
+    result = selectRequest(queryString)
+    return result
+
 
 
 ###########################################################
@@ -105,6 +101,8 @@ def fetchCapteur ():
 @app.route("/capteur/setCapteur", methods = ['POST'])
 def setCapteur():
     print(request.data)
+    splitCapteur(request.data)
+    # TO DO: ecrire uart0
     return "pour set les capteur"
 
 @app.route("/camion/getCamions", methods = ['GET'])
@@ -112,6 +110,15 @@ def fetchCamion ():
     response = getCamion()
     return response
 
+@app.route("/camion/getAffectation", methods=['GET'])
+def fetchAffectation ():
+    print(request.args.get("id"))
+    result = getAffectation(request.args.get("id"))
+    if(len(result) == 0):
+        returnString = "-1"
+    else:
+        returnString = str(result[0][0])
+    return returnString
 
 @app.route("/camion/setCamions", methods = ['POST'])
 def setCamion ():
