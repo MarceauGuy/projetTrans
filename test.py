@@ -94,16 +94,10 @@ def capteur ():
     return "on est alle chercher les capteurs"
 
 
-@app.route("/camion/getCamion", methods = ['GET'])
+@app.route("/camion")
 def camion ():
     response = getCamion()
     return response
 
-
-@app.route("/camion/updateCamion")
-def updateCamion ():
-    return "pour update de camion"
-
-    
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8080, debug=True)
+    app.run()
