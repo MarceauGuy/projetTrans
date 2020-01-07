@@ -98,7 +98,7 @@ def fetchCapteur ():
     response = getCapteur()
     return response
 
-@app.route("/capteur/setCapteur", methods = ['POST'])
+@app.route("/capteur/setCapteurs", methods = ['POST'])
 def setCapteur():
     print(request.data)
     splitCapteur(request.data)
