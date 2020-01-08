@@ -155,6 +155,11 @@ def setCapteur():
     #sendUARTMessage("012345678901234567890123456789012345678901234567890123456789")
     return "pour set les capteur"
 
+
+@app.route("/read")
+def readUART():
+    x = ser.readline()
+
 @app.route("/camion/getCamions", methods = ['GET'])
 def fetchCamion ():
     response = getCamion()
@@ -168,5 +173,5 @@ def fetchAffectation ():
 
     
 if __name__ == '__main__':
-    #initUART()
+    initUART()
     app.run(host='127.0.0.1', port=8000, debug=True)
