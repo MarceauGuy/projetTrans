@@ -27,7 +27,7 @@ def selectRequest(queryString):
     return mobile_records   
 
 def getCapteur ():
-    results = selectRequest("SELECT id, x, y, intensity FROM public.\"feuSimulated\";")
+    results = selectRequest("SELECT id, x, y, intensity FROM public.\"feuSimulated\" order by id;")
     #TODO : public.capteur
     returnString = ""
     for row in results:
@@ -38,7 +38,7 @@ def getCapteur ():
 
 def getCamion ():
     returnString=""
-    results = selectRequest("SELECT cam.idcamion, cam.x, cam.y, t.intensity, cam.idcapteur FROM public.camion cam, public.typecamion t, public.caserne cas where cam.idtype = t.idtype and cam.idcaserne = cas.idcaserne;")
+    results = selectRequest("SELECT cam.idcamion, cam.x, cam.y, t.intensity, cam.idcapteur FROM public.camion cam, public.typecamion t, public.caserne cas where cam.idtype = t.idtype and cam.idcaserne = cas.idcaserne order by cam.idcamion;")
     for row in results : 
         returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + (str(row[4]) if str(row[4]) != "" else "-1" )+";"
     returnString = returnString[:-1]
