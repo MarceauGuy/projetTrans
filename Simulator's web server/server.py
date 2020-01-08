@@ -61,7 +61,7 @@ def splitCamion(camions) :
 def splitCapteur(capteurs) : 
     splitCapteurs = capteurs.split(";")
     cursor = connection.cursor()
-    queryString = """UPDATE public.capteur set intensity=%s where id=%s"""
+    queryString = """UPDATE public.\"feuSimulated\" set intensity=%s where id=%s"""
     uartString = ""
     for capteur in splitCapteurs:
         splitCapteur = capteur.split(",")
@@ -138,11 +138,11 @@ def fetchCapteur ():
     response = getFeux()
     return response
 
-@app.route("/capteur/setCapteurs", methods = ['POST'])
+@app.route("/feu/setFeux", methods = ['POST'])
 def setCapteur():
     message = splitCapteur(request.data)
     #sendUARTMessage(message)
-    sendUARTMessage("012345678901234567890123456789012345678901234567890123456789\n")
+    #sendUARTMessage("012345678901234567890123456789012345678901234567890123456789\n")
     return "pour set les capteur"
 
 @app.route("/camion/getCamions", methods = ['GET'])
