@@ -40,9 +40,7 @@ def getCamion ():
     returnString=""
     results = selectRequest("SELECT cam.idcamion, cam.x, cam.y, t.intensity, cam.idcapteur FROM public.camion cam, public.typecamion t, public.caserne cas where cam.idtype = t.idtype and cam.idcaserne = cas.idcaserne;")
     for row in results : 
-        print(str(row[4]))
         returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + (str(row[4]) if str(row[4]) != "" else "-1" )+";"
-        print(returnString)
     returnString = returnString[:-1]
     return returnString
 
@@ -82,8 +80,6 @@ def splitAffectation(affectations):
     queryString = """UPDATE public.camion SET  idcapteur=%s WHERE idcamion = %s;"""
     for affectation in splitAffectations:
         splitAffectation = affectation.split(",")
-        if splitAffectation[1] == "-1":
-            splitAffectation[1] = "null"
         try:
             cursor.execute(queryString,(splitAffectation[1], splitAffectation[0]))
         except (Exception, psycopg2.Error) as error :
