@@ -26,8 +26,8 @@ def selectRequest(queryString):
         print ("Error while fetching data from PostgreSQL", error)
     return mobile_records   
 
-def getCapteur ():
-    results = selectRequest("SELECT * FROM public.capteur;")
+def getFeux ():
+    results = selectRequest("SELECT * FROM public.\"feuSimulated\";")
     returnString = ""
     for row in results:
         returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
@@ -39,7 +39,7 @@ def getCamion ():
     returnString=""
     results = selectRequest("SELECT cam.idcamion, cam.x, cam.y, cas.x, cas.y, t.intensity, cam.idcapteur FROM public.camion cam, public.typecamion t, public.caserne cas where cam.idtype = t.idtype and cam.idcaserne = cas.idcaserne;")
     for row in results : 
-        returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + str(row[4]) + "," + str(row[5]) + "," + str(row[6]) + ";"
+        returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + str(row[4]) + "," + str(row[5]) + "," + (str(row[6]) if str(row[6]) == "" else "-1" ) + ";"
     returnString = returnString[:-1]
     return returnString
 
@@ -49,6 +49,7 @@ def splitCamion(camions) :
     queryString = """UPDATE public.camion SET x=%s, y=%s  where idcamion = %s"""
     for camion in splitCamions:
         splitCamion = camion.split(",")
+
         try:
             cursor.execute(queryString,(splitCamion[1],splitCamion[2],splitCamion[0]))
         except (Exception, psycopg2.Error) as error :
@@ -132,16 +133,16 @@ def home():
     return "Hello, Flask!"
 
 
-@app.route("/capteur/getCapteurs", methods = ['GET'])
+@app.route("/feu/getFeux", methods = ['GET'])
 def fetchCapteur ():
-    response = getCapteur()
+    response = getFeux()
     return response
 
 @app.route("/capteur/setCapteurs", methods = ['POST'])
 def setCapteur():
     message = splitCapteur(request.data)
     #sendUARTMessage(message)
-    sendUARTMessage("012345678901234567890123456789012345678901234567890123456789")
+    sendUARTMessage("012345678901234567890123456789012345678901234567890123456789\n")
     return "pour set les capteur"
 
 @app.route("/camion/getCamions", methods = ['GET'])
