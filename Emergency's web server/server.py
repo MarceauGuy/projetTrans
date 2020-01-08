@@ -80,6 +80,8 @@ def splitAffectation(affectations):
     queryString = """UPDATE public.camion SET  idcapteur=%s WHERE idcamion = %s;"""
     for affectation in splitAffectations:
         splitAffectation = affectation.split(",")
+        if splitAffectation[1] == "-1":
+            splitAffectation[1] = None
         try:
             cursor.execute(queryString,(splitAffectation[1], splitAffectation[0]))
         except (Exception, psycopg2.Error) as error :
