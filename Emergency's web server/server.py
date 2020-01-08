@@ -27,7 +27,7 @@ def selectRequest(queryString):
     return mobile_records   
 
 def getCapteur ():
-    results = selectRequest("SELECT * FROM public.capteur;")
+    results = selectRequest("SELECT * FROM public.\"feuSimulated\";")
     returnString = ""
     for row in results:
         returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
@@ -60,7 +60,7 @@ def splitCamion(camions) :
 def splitCapteur(capteurs) : 
     splitCapteurs = capteurs.split(";")
     cursor = connection.cursor()
-    queryString = """UPDATE public.capteur set intensity=%s where id=%s"""
+    queryString = """UPDATE public.\"feuSimulated\" set intensity=%s where id=%s"""
     uartString = ""
     for capteur in splitCapteurs:
         splitCapteur = capteur.split(",")
