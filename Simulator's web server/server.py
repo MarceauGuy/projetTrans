@@ -156,7 +156,10 @@ def fetchAffectation ():
     if(len(result) == 0):
         returnString = "-1"
     else:
-        returnString = str(result[0][0])
+        if str(result[0][0]) == "None":
+            returnString = "-1"
+        else:
+            returnString = str(result[0][0])
     return returnString
 
 @app.route("/camion/setCamions", methods = ['POST'])
