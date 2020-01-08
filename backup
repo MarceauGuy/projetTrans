@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 12.1 (Ubuntu 12.1-1.pgdg18.04+1)
--- Dumped by pg_dump version 12.1 (Ubuntu 12.1-1.pgdg18.04+1)
+-- Dumped from database version 11.6 (Ubuntu 11.6-1.pgdg19.10+1)
+-- Dumped by pg_dump version 11.6 (Ubuntu 11.6-1.pgdg19.10+1)
 
--- Started on 2020-01-07 11:37:02 CET
+-- Started on 2020-01-08 16:56:53 CET
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,14 +19,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 2971 (class 1262 OID 13434)
--- Name: postgres; Type: DATABASE; Schema: -; Owner: postgres
+-- TOC entry 2982 (class 1262 OID 13145)
+-- Name: postgres; Type: DATABASE; Schema: -; Owner: tp
 --
 
-CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8';
+CREATE DATABASE postgres WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'fr_FR.UTF-8' LC_CTYPE = 'fr_FR.UTF-8';
 
 
-ALTER DATABASE postgres OWNER TO postgres;
+ALTER DATABASE postgres OWNER TO tp;
 
 \connect postgres
 
@@ -42,9 +42,9 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 2972 (class 0 OID 0)
--- Dependencies: 2971
--- Name: DATABASE postgres; Type: COMMENT; Schema: -; Owner: postgres
+-- TOC entry 2983 (class 0 OID 0)
+-- Dependencies: 2982
+-- Name: DATABASE postgres; Type: COMMENT; Schema: -; Owner: tp
 --
 
 COMMENT ON DATABASE postgres IS 'default administrative connection database';
@@ -52,10 +52,10 @@ COMMENT ON DATABASE postgres IS 'default administrative connection database';
 
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
+SET default_with_oids = false;
 
 --
--- TOC entry 203 (class 1259 OID 16391)
+-- TOC entry 196 (class 1259 OID 24647)
 -- Name: camion; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -72,37 +72,37 @@ CREATE TABLE public.camion (
 ALTER TABLE public.camion OWNER TO postgres;
 
 --
--- TOC entry 202 (class 1259 OID 16386)
+-- TOC entry 197 (class 1259 OID 24650)
 -- Name: capteur; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.capteur (
     id integer NOT NULL,
-    x integer,
-    y integer,
-    intensite integer
+    x double precision,
+    y double precision,
+    intensity integer
 );
 
 
 ALTER TABLE public.capteur OWNER TO postgres;
 
 --
--- TOC entry 204 (class 1259 OID 16396)
+-- TOC entry 198 (class 1259 OID 24653)
 -- Name: caserne; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.caserne (
     idcaserne integer NOT NULL,
     nom text,
-    x integer,
-    y integer
+    x double precision,
+    y double precision
 );
 
 
 ALTER TABLE public.caserne OWNER TO postgres;
 
 --
--- TOC entry 206 (class 1259 OID 24583)
+-- TOC entry 199 (class 1259 OID 24659)
 -- Name: feuSimulated; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -117,100 +117,99 @@ CREATE TABLE public."feuSimulated" (
 ALTER TABLE public."feuSimulated" OWNER TO postgres;
 
 --
--- TOC entry 205 (class 1259 OID 16416)
+-- TOC entry 200 (class 1259 OID 24662)
 -- Name: typecamion; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.typecamion (
     idtype integer NOT NULL,
     nomtype text,
-    intensite integer
+    intensity integer
 );
 
 
 ALTER TABLE public.typecamion OWNER TO postgres;
 
 --
--- TOC entry 2962 (class 0 OID 16391)
--- Dependencies: 203
+-- TOC entry 2972 (class 0 OID 24647)
+-- Dependencies: 196
 -- Data for Name: camion; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.camion (idcamion, idcapteur, idcaserne, idtype, x, y) VALUES (1, 1, 1, 1, 1, 1);
-INSERT INTO public.camion (idcamion, idcapteur, idcaserne, idtype, x, y) VALUES (2, 1, 1, 1, 2, 2);
+INSERT INTO public.camion (idcamion, idcapteur, idcaserne, idtype, x, y) VALUES (1, NULL, 1, 1, 10, 10);
 
 
 --
--- TOC entry 2961 (class 0 OID 16386)
--- Dependencies: 202
+-- TOC entry 2973 (class 0 OID 24650)
+-- Dependencies: 197
 -- Data for Name: capteur; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (0, 0, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (1, 1, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (2, 2, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (3, 3, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (4, 4, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (5, 5, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (6, 6, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (7, 7, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (8, 8, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (9, 9, 0, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (10, 0, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (11, 1, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (12, 2, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (13, 3, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (14, 4, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (15, 5, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (16, 6, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (17, 7, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (18, 8, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (19, 9, 1, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (20, 0, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (21, 1, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (22, 2, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (23, 3, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (24, 4, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (25, 5, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (26, 6, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (27, 7, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (28, 8, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (29, 9, 2, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (30, 0, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (31, 1, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (32, 2, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (33, 3, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (34, 4, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (35, 5, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (36, 6, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (37, 7, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (38, 8, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (39, 9, 3, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (40, 0, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (41, 1, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (42, 2, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (43, 3, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (44, 4, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (45, 5, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (46, 6, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (47, 7, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (48, 8, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (49, 9, 4, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (50, 0, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (51, 1, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (52, 2, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (53, 3, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (54, 4, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (55, 5, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (56, 6, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (57, 7, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (58, 8, 5, 0);
-INSERT INTO public.capteur (id, x, y, intensite) VALUES (59, 9, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (1, 0, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (2, 1, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (3, 2, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (4, 3, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (5, 4, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (6, 5, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (7, 6, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (8, 7, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (9, 8, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (10, 9, 0, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (11, 0, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (12, 1, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (13, 2, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (14, 3, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (15, 4, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (16, 5, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (17, 6, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (18, 7, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (19, 8, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (20, 9, 1, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (21, 0, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (22, 1, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (23, 2, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (24, 3, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (25, 4, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (26, 5, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (27, 6, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (28, 7, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (29, 8, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (30, 9, 2, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (31, 0, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (32, 1, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (33, 2, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (34, 3, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (35, 4, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (36, 5, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (37, 6, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (38, 7, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (39, 8, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (40, 9, 3, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (41, 0, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (42, 1, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (43, 2, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (44, 3, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (45, 4, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (46, 5, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (47, 6, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (48, 7, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (49, 8, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (50, 9, 4, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (51, 0, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (52, 1, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (53, 2, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (54, 3, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (55, 4, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (56, 5, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (57, 6, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (58, 7, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (59, 8, 5, 0);
+INSERT INTO public.capteur (id, x, y, intensity) VALUES (60, 9, 5, 0);
 
 
 --
--- TOC entry 2963 (class 0 OID 16396)
--- Dependencies: 204
+-- TOC entry 2974 (class 0 OID 24653)
+-- Dependencies: 198
 -- Data for Name: caserne; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -218,8 +217,8 @@ INSERT INTO public.caserne (idcaserne, nom, x, y) VALUES (1, 'caserneDeTess', 0,
 
 
 --
--- TOC entry 2965 (class 0 OID 24583)
--- Dependencies: 206
+-- TOC entry 2975 (class 0 OID 24659)
+-- Dependencies: 199
 -- Data for Name: feuSimulated; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -286,16 +285,16 @@ INSERT INTO public."feuSimulated" (id, x, y, intensity) VALUES (60, 9, 5, 0);
 
 
 --
--- TOC entry 2964 (class 0 OID 16416)
--- Dependencies: 205
+-- TOC entry 2976 (class 0 OID 24662)
+-- Dependencies: 200
 -- Data for Name: typecamion; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.typecamion (idtype, nomtype, intensite) VALUES (1, 'Basique', 5);
+INSERT INTO public.typecamion (idtype, nomtype, intensity) VALUES (1, 'Basique', 5);
 
 
 --
--- TOC entry 2820 (class 2606 OID 16390)
+-- TOC entry 2841 (class 2606 OID 24669)
 -- Name: capteur Capteur_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -304,7 +303,7 @@ ALTER TABLE ONLY public.capteur
 
 
 --
--- TOC entry 2822 (class 2606 OID 16395)
+-- TOC entry 2836 (class 2606 OID 24671)
 -- Name: camion camion_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -313,7 +312,7 @@ ALTER TABLE ONLY public.camion
 
 
 --
--- TOC entry 2827 (class 2606 OID 16403)
+-- TOC entry 2843 (class 2606 OID 24673)
 -- Name: caserne caserne_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -322,7 +321,7 @@ ALTER TABLE ONLY public.caserne
 
 
 --
--- TOC entry 2831 (class 2606 OID 24587)
+-- TOC entry 2845 (class 2606 OID 24675)
 -- Name: feuSimulated feuSimulated_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -331,7 +330,7 @@ ALTER TABLE ONLY public."feuSimulated"
 
 
 --
--- TOC entry 2829 (class 2606 OID 16423)
+-- TOC entry 2847 (class 2606 OID 24677)
 -- Name: typecamion typecamione_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -340,7 +339,7 @@ ALTER TABLE ONLY public.typecamion
 
 
 --
--- TOC entry 2823 (class 1259 OID 16409)
+-- TOC entry 2837 (class 1259 OID 24678)
 -- Name: fki_fk_idcapteur; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -348,7 +347,7 @@ CREATE INDEX fki_fk_idcapteur ON public.camion USING btree (idcapteur);
 
 
 --
--- TOC entry 2824 (class 1259 OID 16415)
+-- TOC entry 2838 (class 1259 OID 24679)
 -- Name: fki_fk_idcaserne; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -356,7 +355,7 @@ CREATE INDEX fki_fk_idcaserne ON public.camion USING btree (idcaserne);
 
 
 --
--- TOC entry 2825 (class 1259 OID 16429)
+-- TOC entry 2839 (class 1259 OID 24680)
 -- Name: fki_fk_idtype; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -364,16 +363,16 @@ CREATE INDEX fki_fk_idtype ON public.camion USING btree (idtype);
 
 
 --
--- TOC entry 2832 (class 2606 OID 16404)
+-- TOC entry 2850 (class 2606 OID 32824)
 -- Name: camion fk_idcapteur; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.camion
-    ADD CONSTRAINT fk_idcapteur FOREIGN KEY (idcapteur) REFERENCES public.capteur(id) NOT VALID;
+    ADD CONSTRAINT fk_idcapteur FOREIGN KEY (idcamion) REFERENCES public.capteur(id) NOT VALID;
 
 
 --
--- TOC entry 2833 (class 2606 OID 16410)
+-- TOC entry 2848 (class 2606 OID 24686)
 -- Name: camion fk_idcaserne; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -382,7 +381,7 @@ ALTER TABLE ONLY public.camion
 
 
 --
--- TOC entry 2834 (class 2606 OID 16424)
+-- TOC entry 2849 (class 2606 OID 24691)
 -- Name: camion fk_idtype; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -390,7 +389,7 @@ ALTER TABLE ONLY public.camion
     ADD CONSTRAINT fk_idtype FOREIGN KEY (idtype) REFERENCES public.typecamion(idtype) NOT VALID;
 
 
--- Completed on 2020-01-07 11:37:02 CET
+-- Completed on 2020-01-08 16:56:53 CET
 
 --
 -- PostgreSQL database dump complete

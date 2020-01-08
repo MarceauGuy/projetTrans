@@ -145,6 +145,7 @@ def home():
     return "Hello, Flask!"
 
 
+
 @app.route("/capteur/getCapteurs", methods = ['GET'])
 def fetchCapteur ():
     response = getCapteur()
