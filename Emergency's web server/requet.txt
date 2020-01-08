@@ -1,3 +1,3 @@
 POST    : camion/updateAffectation  "idcamion,idfeu/-1;..."
-GET     : camion/getCamion          "id,x,y,intensity,idfeu/-1,;..."
+GET     : camion/getCamion          "id,x,y,intensity,idfeu/-1;..."
 GET     :  capteur/getCapteurs              "id,x,y,instensity;..."
