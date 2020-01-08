@@ -3,6 +3,7 @@ from flask import Flask, request
 from pprint import pprint
 from psycopg2.extras import execute_values
 import serial
+from flask_cors import CORS
 
 """
     finally:
@@ -43,6 +44,14 @@ def getCamion ():
         returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + (str(row[4]) if str(row[4]) != "None" else "-1" )+";"
     returnString = returnString[:-1]
     return returnString
+
+def getFire():
+    retuls = selectRequest("SELECT id, x, y, intensity FROM public.\"feuSimulated\" where intensity>0;")
+    for row in results : 
+        returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + (str(row[4]) if str(row[4]) != "None" else "-1" )+";"
+    returnString = returnString[:-1]
+    return returnString
+
 
 def splitCamion(camions) : 
     splitCamions = camions.split(";")
@@ -140,11 +149,16 @@ def sendUARTMessage(msg):
      
             
 app = Flask(__name__)
+CORS(app)
+
 @app.route("/")
 def home():
     return "Hello, Flask!"
-
-
+"""
+@app.route("map/getFire")
+def mapRequest():
+    getFire()
+"""
 
 @app.route("/capteur/getCapteurs", methods = ['GET'])
 def fetchCapteur ():
