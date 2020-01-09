@@ -96,20 +96,15 @@ def splitCamion(camions) :
     
 
 def splitCapteur(capteurs) : 
-    splitCapteurs = capteurs.split(";")
     cursor = connection.cursor()
-    queryString = """UPDATE public.\"feuSimulated\" set intensity=%s where id=%s"""
-    #TODO : public.capteur
-    uartString = ""
-    for capteur in splitCapteurs:
-        splitCapteur = capteur.split(",")
-        uartString+=splitCapteur[1]
+    queryString = """UPDATE public.capteur set intensity=%s where id=%s"""
+    for capteur in capteurs:
         try:
-            cursor.execute(queryString,(splitCapteur[1], splitCapteur[0]))
+            cursor.execute(queryString,(capteur['intensite'], capteur['id']))
         except (Exception, psycopg2.Error) as error :
             print ("Error while updating data in capteur table", error)   
     connection.commit()
-    return uartString
+    return "hehe"
 
 def splitAffectation(affectations):
     splitAffectations = affectations.split(";")
@@ -198,22 +193,17 @@ def mapCaserne():
     response = getCaserne()
     return response
 
-@app.route("/sensor/setCapteurs")
+@app.route("/sensor/setCapteurs", methods=['POST'])
 def sensorsCapteur():
     print(request.data)
-    return request.data
+    #print(json.loads(request.data)[0]["intensite"])
+    #splitCapteur(json.loads(request.data))
+    return "hehe"
 
 @app.route("/capteur/getCapteurs", methods = ['GET'])
 def fetchCapteur ():
     response = getCapteur()
     return response
-
-@app.route("/capteur/setCapteurs", methods = ['POST'])
-def setCapteur():
-    message = splitCapteur(request.data)
-    #sendUARTMessage(message)
-    #sendUARTMessage("012345678901234567890123456789012345678901234567890123456789")
-    return "pour set les capteur"
 
 
 @app.route("/read")
