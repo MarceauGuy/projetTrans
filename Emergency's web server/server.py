@@ -1,5 +1,5 @@
 import psycopg2
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from pprint import pprint
 from psycopg2.extras import execute_values
 import serial
@@ -53,6 +53,16 @@ def getFire():
     returnString = returnString[:-1]
     return returnString
 
+"""
+SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where cam.x != cas.x and cam.y != cas.y;
+"""
+def getMovingCamion():
+    returnString = ""
+    results = selectRequest("SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where cam.x != cas.x and cam.y != cas.y;")
+    for row in results :
+        returnString+= str(row[0]) + "," + str(row[1]) + "," + str(row[2]) + ";"
+    returnString = returnString[:-1]
+    return returnString
 
 def splitCamion(camions) : 
     splitCamions = camions.split(";")
@@ -161,6 +171,15 @@ def mapRequest():
     response = getFire()
     return response
 
+@app.route("/map/getCamions")
+def mapCamion():
+    reponse = getMovingCamion()
+    return response
+
+@app.route("/sensor/setCapteurs")
+def sensorsCapteur():
+    print(request.data)
+    return request.data
 
 @app.route("/capteur/getCapteurs", methods = ['GET'])
 def fetchCapteur ():
