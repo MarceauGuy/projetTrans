@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from pprint import pprint
 from psycopg2.extras import execute_values
 import serial
+import json
 from flask_cors import CORS
 
 """
@@ -46,23 +47,39 @@ def getCamion ():
     return returnString
 
 def getFire():
-    returnString=""
+    json_data = []
+    returnString="["
     results = selectRequest("SELECT id, x, y, intensity FROM public.\"feuSimulated\" where intensity>0;")
     for row in results :
-        returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
-    returnString = returnString[:-1]
+        returnString +="{\"id\":"+ str(row[0]) +",\"x\":"+ str(row[1]) +",\"y\":"+ str(row[2]) +",\"intensity\": "+ str(row[3]) +"},"
+    returnString = returnString[:-1] +"]"
+    if(len(returnString) == 1):
+        returnString = "[]"
     return returnString
 
 """
 SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where cam.x != cas.x and cam.y != cas.y;
 """
 def getMovingCamion():
-    returnString = ""
+    returnString = "["
     results = selectRequest("SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where cam.x != cas.x and cam.y != cas.y;")
     for row in results :
-        returnString+= str(row[0]) + "," + str(row[1]) + "," + str(row[2]) + ";"
-    returnString = returnString[:-1]
+        returnString +="{\"id\":"+ str(row[0]) +",\"x\":"+ str(row[1]) +",\"y\":"+ str(row[2]) +"},"
+    returnString = returnString[:-1] +"]"
+    if(len(returnString) == 1):
+        returnString = "[]"
     return returnString
+
+def getCaserne():
+    returnString = "["
+    results = selectRequest("SELECT idcaserne, x, y FROM public.caserne;")
+    for row in results :
+        returnString +="{\"id\":"+ str(row[0]) +",\"x\":"+ str(row[1]) +",\"y\":"+ str(row[2]) +"},"
+    returnString = returnString[:-1] +"]"
+    if(len(returnString) == 1):
+        returnString = "[]"
+    return returnString
+
 
 def splitCamion(camions) : 
     splitCamions = camions.split(";")
@@ -166,14 +183,19 @@ CORS(app)
 def home():
     return "Hello, Flask!"
 
-@app.route("/map/getFire")
-def mapRequest():
+@app.route("/map/getCapteurs")
+def mapFire():
     response = getFire()
     return response
 
 @app.route("/map/getCamions")
 def mapCamion():
-    reponse = getMovingCamion()
+    response = getMovingCamion()
+    return response
+
+@app.route("/map/getCasernes")
+def mapCaserne():
+    response = getCaserne()
     return response
 
 @app.route("/sensor/setCapteurs")
