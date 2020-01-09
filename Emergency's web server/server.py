@@ -46,9 +46,10 @@ def getCamion ():
     return returnString
 
 def getFire():
-    retuls = selectRequest("SELECT id, x, y, intensity FROM public.\"feuSimulated\" where intensity>0;")
-    for row in results : 
-        returnString +=str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + "," + (str(row[4]) if str(row[4]) != "None" else "-1" )+";"
+    returnString=""
+    results = selectRequest("SELECT id, x, y, intensity FROM public.\"feuSimulated\" where intensity>0;")
+    for row in results :
+        returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
     returnString = returnString[:-1]
     return returnString
 
@@ -154,11 +155,12 @@ CORS(app)
 @app.route("/")
 def home():
     return "Hello, Flask!"
-"""
-@app.route("map/getFire")
+
+@app.route("/map/getFire")
 def mapRequest():
-    getFire()
-"""
+    response = getFire()
+    return response
+
 
 @app.route("/capteur/getCapteurs", methods = ['GET'])
 def fetchCapteur ():
