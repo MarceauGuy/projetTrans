@@ -62,7 +62,7 @@ SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where c
 """
 def getMovingCamion():
     returnString = "["
-    results = selectRequest("SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where cam.x != cas.x and cam.y != cas.y;")
+    results = selectRequest("sELECT idcamion, cam.x, cam.y, t.intensity FROM public.camion cam, public.caserne cas, typecamion t where cam.x != cas.x and cam.y != cas.y and cam.idtype = t.idtype;")
     for row in results :
         returnString +="{\"id\":"+ str(row[0]) +",\"x\":"+ str(row[1]) +",\"y\":"+ str(row[2]) +"},"
     returnString = returnString[:-1] +"]"
@@ -140,36 +140,7 @@ try:
 except (Exception, psycopg2.Error) as error :
     print ("Error while fetching data from PostgreSQL", error)
 
-# send serial message 
-# Don't forget to establish the right serial port ******** ATTENTION
-# SERIALPORT = "/dev/ttyUSB0"
-SERIALPORT = "/dev/tty2"
-BAUDRATE = 115200
-ser = serial.Serial()
-
-def initUART():
-    ser.port=SERIALPORT
-    ser.baudrate=BAUDRATE
-    ser.bytesize = serial.EIGHTBITS #number of bits per bytes
-    ser.parity = serial.PARITY_NONE #set parity check: no parity
-    ser.stopbits = serial.STOPBITS_ONE #number of stop bits
-    ser.timeout = None          #block read
-
-    # ser.timeout = 0             #non-block read
-    # ser.timeout = 2              #timeout block read
-    ser.xonxoff = False     #disable software flow control
-    ser.rtscts = False     #disable hardware (RTS/CTS) flow control
-    ser.dsrdtr = False       #disable hardware (DSR/DTR) flow control
-    try:
-        ser.open()
-    except serial.SerialException:
-        print("Serial {} port not available".format(SERIALPORT))
-        exit()
-
-def sendUARTMessage(msg):
-    ser.write(msg.encode())
-    # print("Message <" + msg + "> sent to micro-controller." )
-     
+   
             
 app = Flask(__name__)
 CORS(app)
@@ -223,5 +194,4 @@ def fetchAffectation ():
 
     
 if __name__ == '__main__':
-    initUART()
     app.run(host='127.0.0.1', port=8000, debug=True)
