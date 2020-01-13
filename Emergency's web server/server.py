@@ -5,6 +5,7 @@ from psycopg2.extras import execute_values
 import serial
 import json
 from flask_cors import CORS
+#import paho.mqtt.publish as publish
 
 """
     finally:
@@ -35,6 +36,7 @@ def getCapteur ():
     for row in results:
         returnString +=  str(row[0]) + ","+ str(row[1]) + "," + str(row[2]) + "," + str(row[3]) + ";"
     returnString = returnString[:-1]
+    #splitCapteurMqtt(returnString)
     return returnString
 
 
@@ -62,7 +64,7 @@ SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where c
 """
 def getMovingCamion():
     returnString = "["
-    results = selectRequest("SELECT idcamion, cam.x, cam.y, t.intensity FROM public.camion cam, public.caserne cas, typecamion t where cam.x != cas.x and cam.y != cas.y and cam.idtype = t.idtype;")
+    results = selectRequest("SELECT idcamion, cam.x, cam.y, t.intensity FROM public.camion cam, typecamion t where cam.idtype = t.idtype and (cam.x not in (select x from public.caserne) or cam.y not in (select y from public.camion));")
     for row in results :
         returnString +="{\"id\":"+ str(row[0]) +",\"x\":"+ str(row[1]) +",\"y\":"+ str(row[2]) +", \"intensity\":"+ str(row[3])+"},"
     returnString = returnString[:-1] +"]"
@@ -105,6 +107,15 @@ def splitCapteur(capteurs) :
             print ("Error while updating data in capteur table", error)   
     connection.commit()
     return "hehe"
+
+def splitCapteurMqtt(message):
+    capteurs = message.split(';')
+    print("hehe")
+    for capteur in capteurs:
+        queryString = str(capteur) 
+        publish.single("capteur", queryString, hostname="localhost")
+        print("hehe")
+
 
 def splitAffectation(affectations):
     splitAffectations = affectations.split(";")
