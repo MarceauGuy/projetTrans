@@ -62,9 +62,9 @@ SELECT idcamion, cam.x, cam.y FROM public.camion cam, public.caserne cas where c
 """
 def getMovingCamion():
     returnString = "["
-    results = selectRequest("sELECT idcamion, cam.x, cam.y, t.intensity FROM public.camion cam, public.caserne cas, typecamion t where cam.x != cas.x and cam.y != cas.y and cam.idtype = t.idtype;")
+    results = selectRequest("SELECT idcamion, cam.x, cam.y, t.intensity FROM public.camion cam, public.caserne cas, typecamion t where cam.x != cas.x and cam.y != cas.y and cam.idtype = t.idtype;")
     for row in results :
-        returnString +="{\"id\":"+ str(row[0]) +",\"x\":"+ str(row[1]) +",\"y\":"+ str(row[2]) +"},"
+        returnString +="{\"id\":"+ str(row[0]) +",\"x\":"+ str(row[1]) +",\"y\":"+ str(row[2]) +", \"intensity\":"+ str(row[3])+"},"
     returnString = returnString[:-1] +"]"
     if(len(returnString) == 1):
         returnString = "[]"
