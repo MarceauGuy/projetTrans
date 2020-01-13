@@ -3,6 +3,9 @@ from flask import Flask, request
 from pprint import pprint
 from psycopg2.extras import execute_values
 import serial
+from Crypto import Random
+from Crypto.Cipher import AES
+import base64
 
 """
     finally:
@@ -12,6 +15,45 @@ import serial
             connection.close()
             print("PostgreSQL connection is closed")
 """
+
+class Encryptor:
+    def __init__(self, key):
+        self.key = key
+
+    def pad(self, s):
+        return s + b"\0" * (AES.block_size - len(s) % AES.block_size)
+
+    def encrypt(self, message, key, key_size=256):
+        message = self.pad(message)
+        iv = Random.new().read(AES.block_size)
+        cipher = AES.new(key, AES.MODE_CBC, iv)
+        return iv + cipher.encrypt(message)
+
+    def decrypt(self, ciphertext, key):
+        iv = ciphertext[:AES.block_size]
+        cipher = AES.new(key, AES.MODE_CBC, iv)
+        plaintext = cipher.decrypt(ciphertext[AES.block_size:])
+        return plaintext.rstrip(b"\0")
+
+
+def read_scales(message):
+    key = 'nqbU0co8vJv5p/I6WHXNKLr9HXxXtewE'
+    #b'[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e'
+    enc = Encryptor(key)
+    clear = lambda: os.system('cls')
+
+    #data = enc.encrypt(chn,key,128)
+    data_send = enc.encrypt(message,key,128)
+    print('data non chiffre:',message)
+
+    base64_enc = base64.b64encode(data_send)
+    #data_send = repr(data_send)
+    #print(data.encode("hex"))
+    print('data chiffre:',base64_enc )
+    print('P1:',base64_enc[0:54] )
+    print('P2:',base64_enc[54:108] )
+    sendUARTMessage(base64_enc)
+
 
 def selectRequest(queryString):
     mobile_records = ""
@@ -99,7 +141,7 @@ except (Exception, psycopg2.Error) as error :
 # send serial message 
 # Don't forget to establish the right serial port ******** ATTENTION
 # SERIALPORT = "/dev/ttyUSB0"
-SERIALPORT = "/dev/tty2"
+SERIALPORT = "/dev/ttyS3"
 BAUDRATE = 115200
 ser = serial.Serial()
 
@@ -123,8 +165,8 @@ def initUART():
         exit()
 
 def sendUARTMessage(msg):
-    ser.write(msg.encode())
-    # print("Message <" + msg + "> sent to micro-controller." )
+    ser.write(msg)
+    print("Message <" + msg + "> sent to micro-controller." )
      
             
 app = Flask(__name__)
@@ -141,7 +183,7 @@ def fetchCapteur ():
 @app.route("/feu/setFeux", methods = ['POST'])
 def setCapteur():
     message = splitCapteur(request.data)
-    #sendUARTMessage(message)
+    read_scales(message)
     #sendUARTMessage("012345678901234567890123456789012345678901234567890123456789\n")
     return "pour set les capteur"
 
